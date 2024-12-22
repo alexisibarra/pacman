@@ -4,6 +4,7 @@ import {
   getRightPoint,
   getLeftPoint,
   getNextPoints,
+  eatDots,
 } from "../src/index";
 
 describe("getUpPoint", () => {
@@ -266,16 +267,38 @@ describe("getNextPoints", () => {
       expect(nextPoints).toHaveLength(0);
     });
   });
+});
 
-  // test("Normal inner point with number down", () => {
-  //   const maze = [
-  //     [1, 2, 3, 4, 5],
-  //     [6, 7, 8, 9, 10],
-  //     [11, 12, 13, 14, 15],
-  //     [16, 17, 18, 19, 20],
-  //     [21, 22, 23, 24, 25],
-  //   ];
+describe("eatDots", () => {
+  describe("Case 1", () => {
+    const maze = [
+      [1, 2, 3, 4, 5],
+      [6, 7, 8, 9, 10],
+      [11, 12, 13, 14, 15],
+      [16, 17, 18, 19, 20],
+      [21, 22, 23, 24, 25],
+    ];
 
-  //   expect(getLeftPoint(maze, 2, 2)).toStrictEqual([2, 1]);
-  // });
+    const result = eatDots(maze);
+
+    test("Should return 325", () => {
+      expect(result).toBe(325);
+    });
+  });
+
+  describe("Case 2", () => {
+    const maze = [
+      [28, 1, 3, 29, 5],
+      [6, 7, 15, 19, 8],
+      [11, 12, 13, 14, 25],
+      [16, 10, 18, 19, 30],
+      [21, 22, 23, 20, 9],
+    ];
+
+    const result = eatDots(maze);
+
+    test("Should return 146", () => {
+      expect(result).toBe(146);
+    });
+  });
 });
