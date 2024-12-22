@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "commonjs", // Or "esnext" if you prefer
+    "target": "es5", // Or a higher target if needed
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
+  }
+}

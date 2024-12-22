@@ -1,40 +1,76 @@
-const getNextPoints = (maze, row, column) => {
-  const up =
-    row - 1 >= 0 && maze[row - 1][column] > 0 ? [row - 1, column] : undefined;
-  const down =
-    row + 1 < maze[0].length && maze[row + 1][column] > 0
-      ? [row + 1, column]
-      : undefined;
-  const left =
-    column - 1 >= 0 && maze[row][column - 1] > 0
-      ? [row, column - 1]
-      : undefined;
-  const right =
-    column + 1 < maze.length && maze[row][column + 1] > 0
-      ? [row, column + 1]
-      : undefined;
+type Maze = number[][];
 
-  return [up, down, left, right]
-    .filter(Boolean)
-    .sort((coordinateA, coordinateB) => {
-      const rowA = coordinateA[0];
-      const columnA = coordinateA[1];
-      const rowB = coordinateB[0];
-      const columnB = coordinateB[1];
+type Coordinate = [number, number];
 
-      if (maze[rowA][columnA] < maze[rowB][columnB]) {
-        return 1;
-      }
+type PointGetter = (
+  maze: Maze,
+  row: number,
+  column: number
+) => Coordinate | undefined;
 
-      if (maze[rowA][columnA] > maze[rowB][columnB]) {
-        return -1;
-      }
-
-      return 0;
-    });
+export const getUpPoint: PointGetter = (maze, row, column) => {
+  return row - 1 >= 0 && maze[row - 1][column] > 0
+    ? [row - 1, column]
+    : undefined;
 };
 
-const eatDots = (maze, previousRow = undefined, previousColumn = undefined) => {
+export const getDownPoint: PointGetter = (maze, row, column) => {
+  return row + 1 < maze[0].length && maze[row + 1][column] > 0
+    ? [row + 1, column]
+    : undefined;
+};
+
+export const getLeftPoint: PointGetter = (maze, row, column) => {
+  return column - 1 >= 0 && maze[row][column - 1] > 0
+    ? [row, column - 1]
+    : undefined;
+};
+
+export const getRightPoint: PointGetter = (maze, row, column) => {
+  return column + 1 < maze.length && maze[row][column + 1] > 0
+    ? [row, column + 1]
+    : undefined;
+};
+
+type GetNextPoints = (maze: Maze, row: number, column: number) => Coordinate[];
+
+export const getNextPoints: GetNextPoints = (maze, row, column) => {
+  const up = getUpPoint(maze, row, column);
+  const down = getDownPoint(maze, row, column);
+  const left = getLeftPoint(maze, row, column);
+  const right = getRightPoint(maze, row, column);
+
+  const points = [up, down, left, right].filter(Boolean) as Coordinate[];
+
+  return points.sort((coordinateA, coordinateB) => {
+    const rowA = coordinateA[0];
+    const columnA = coordinateA[1];
+    const rowB = coordinateB[0];
+    const columnB = coordinateB[1];
+
+    if (maze[rowA][columnA] < maze[rowB][columnB]) {
+      return 1;
+    }
+
+    if (maze[rowA][columnA] > maze[rowB][columnB]) {
+      return -1;
+    }
+
+    return 0;
+  });
+};
+
+type EatDots = (
+  maze: Maze,
+  previousRow?: number,
+  previousColumn?: number
+) => number;
+
+const eatDots: EatDots = (
+  maze,
+  previousRow = undefined,
+  previousColumn = undefined
+) => {
   // column and row are the coordinates of pacman
   const column = previousColumn || Math.floor(maze[0].length / 2);
   const row = previousRow || Math.floor(maze.length / 2);
@@ -52,7 +88,7 @@ const eatDots = (maze, previousRow = undefined, previousColumn = undefined) => {
     return valueEaten;
   }
 
-  const nextPoint = nextPoints[0];
+  const nextPoint = nextPoints[0] as Coordinate;
   console.log({ nextPoints });
 
   maze[row][column] = 0;
